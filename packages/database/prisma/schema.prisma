@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SystemHealthCheck {
+  id        String   @id @default(cuid())
+  service   String
+  status    String
+  createdAt DateTime @default(now())
+
+  @@index([service])
+  @@index([createdAt])
+}

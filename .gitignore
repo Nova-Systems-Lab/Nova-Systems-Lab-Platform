@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 # Jetbrains IDE Files
 .idea/
+
+# Turborepo cache
+.turbo/

@@ -1,10 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+// End-to-end coverage boots the full AppModule, so it requires a valid
+// environment (WEB_ORIGIN, DATABASE_URL). It is intentionally excluded from the
+// default `pnpm test` unit suite and is run explicitly via `pnpm test:e2e`.
+describe('Health (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -13,14 +16,15 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.setGlobalPrefix('api/v1');
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('GET /api/v1/health returns a stable service status', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/api/v1/health')
       .expect(200)
-      .expect('Hello World!');
+      .expect({ status: 'ok', service: 'nova-systems-lab-api' });
   });
 
   afterEach(async () => {

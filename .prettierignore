@@ -1,0 +1,14 @@
+# Package manager lockfile — owned by pnpm, never hand- or tool-formatted.
+pnpm-lock.yaml
+
+# Build and tooling output
+**/dist/**
+**/.next/**
+**/.turbo/**
+**/coverage/**
+
+# Generated Prisma client
+packages/database/generated/**
+
+# Prisma migrations are generated SQL and should not be reformatted
+packages/database/prisma/migrations/**

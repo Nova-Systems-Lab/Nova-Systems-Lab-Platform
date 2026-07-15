@@ -18,8 +18,8 @@ concurrency:
 env:
   NODE_ENV: test
 
-  # Safe placeholders used only while generating and compiling Prisma.
-  # CI does not connect to a database.
+  # Safe placeholders for Prisma generation and compilation only.
+  # CI does not connect to this database.
   DATABASE_URL: postgresql://ci_user:ci_password@localhost:5432/ci_database
   DIRECT_URL: postgresql://ci_user:ci_password@localhost:5432/ci_database
 
@@ -40,7 +40,7 @@ jobs:
           run_install: false
 
       - name: Configure Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -48,6 +48,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm --filter @nova/database db:generate
+
+      - name: Build shared database package
+        run: pnpm --filter @nova/database build
 
       - name: Lint
         run: pnpm lint

@@ -17,6 +17,8 @@ const environmentSchema = z.object({
         message: 'DATABASE_URL must be a PostgreSQL connection URL',
       },
     ),
+
+  WEB_ORIGIN: z.string().url(),
 });
 
 export type EnvironmentVariables = z.infer<typeof environmentSchema>;

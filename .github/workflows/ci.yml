@@ -1,0 +1,62 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_ENV: test
+
+  # Safe placeholders used only while generating and compiling Prisma.
+  # CI does not connect to a database.
+  DATABASE_URL: postgresql://ci_user:ci_password@localhost:5432/ci_database
+  DIRECT_URL: postgresql://ci_user:ci_password@localhost:5432/ci_database
+
+jobs:
+  validate:
+    name: Test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 11.13.0
+          run_install: false
+
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Type-check
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build

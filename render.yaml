@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: nova-web
+    runtime: node
+    region: singapore
+    plan: free
+    branch: main
+
+    buildCommand: pnpm install --frozen-lockfile && pnpm --filter @nova/web build
+    startCommand: pnpm --filter @nova/web start
+
+    envVars:
+      - key: NODE_VERSION
+        value: 24.17.0
+
+      - key: NODE_ENV
+        value: production
+
+  - type: web
+    name: nova-api
+    runtime: node
+    region: singapore
+    plan: free
+    branch: main
+
+    buildCommand: pnpm install --frozen-lockfile && pnpm --filter @nova/database build && pnpm --filter @nova/api build
+    startCommand: pnpm --filter @nova/api start:prod
+    healthCheckPath: /api/v1/health
+
+    envVars:
+      - key: NODE_VERSION
+        value: 24.17.0
+
+      - key: NODE_ENV
+        value: production
+
+      - key: DATABASE_URL
+        sync: false
+
+      # Prisma requires a syntactically valid URL while generating its
+      # client. This placeholder is not used for runtime database access.
+      - key: DIRECT_URL
+        value: postgresql://prisma:prisma@localhost:5432/prisma

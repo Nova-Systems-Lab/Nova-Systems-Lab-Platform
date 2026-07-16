@@ -11,6 +11,10 @@ integration, and experimental runtime technologies.
 - **GitHub organization:** `Nova-Systems-Lab`
 - **Founder account:** `SamratB8`
 
+It is presented as a growing modern technology startup, an engineering-led
+product organization, an independent open-source software organization, and a
+**future** commercial software company.
+
 ## What Nova Systems Lab is not
 
 Nova Systems Lab is **not** currently represented as any of the following, and
@@ -21,14 +25,28 @@ no code, copy, or documentation may claim otherwise:
 - an NGO
 - a Section 8 company
 - a legally incorporated organization
+- a personal portfolio or student-project collection
+- a generic software agency
+- a donation-driven nonprofit
+- a funded startup, multinational, or large established corporation
 
 Do not invent legal status, registration, nonprofit status, partnerships,
 certifications, team members, project achievements, testimonials, or statistics.
+Nova Systems Lab does not solicit donations.
+
+Positioning, approved public wording, and the product-status vocabulary are
+authoritative in `PRODUCT_POSITIONING.md` and `BRAND_IDENTITY.md`.
 
 ## Current projects
 
 - **WSL Studio**
 - **WinDroid Runtime** (never rename to "WinDroid Studio")
+
+Long-term direction may include additional developer products, runtime
+technologies, client software projects, platform services, native Windows and
+Android applications, and a future game studio with RigForge as a future game
+project. The game studio and RigForge are **not operational** and must never be
+presented as active.
 
 ## Platform vision
 

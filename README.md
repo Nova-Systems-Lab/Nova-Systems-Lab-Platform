@@ -66,19 +66,19 @@ cp apps/web/.env.example        apps/web/.env.local
 
 API variables (`apps/api/.env`):
 
-| Variable       | Required | Example                                                        | Notes                                             |
-| -------------- | -------- | -------------------------------------------------------------- | ------------------------------------------------- |
-| `NODE_ENV`     | no       | `development`                                                  | `development` \| `test` \| `production`           |
-| `PORT`         | no       | `4000`                                                         | Defaults to `4000`; local API is `4000`           |
-| `DATABASE_URL` | **yes**  | `postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require`     | Neon **pooled** URL; use the Neon **dev** branch  |
-| `WEB_ORIGIN`   | **yes**  | `http://localhost:3000`                                        | Trusted browser origin for CORS                   |
+| Variable       | Required | Example                                                    | Notes                                            |
+| -------------- | -------- | ---------------------------------------------------------- | ------------------------------------------------ |
+| `NODE_ENV`     | no       | `development`                                              | `development` \| `test` \| `production`          |
+| `PORT`         | no       | `4000`                                                     | Defaults to `4000`; local API is `4000`          |
+| `DATABASE_URL` | **yes**  | `postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require` | Neon **pooled** URL; use the Neon **dev** branch |
+| `WEB_ORIGIN`   | **yes**  | `http://localhost:3000`                                    | Trusted browser origin for CORS                  |
 
 Database package variables (`packages/database/.env`):
 
-| Variable       | Required | Notes                                                    |
-| -------------- | -------- | -------------------------------------------------------- |
-| `DATABASE_URL` | **yes**  | Neon **pooled** URL used by the Prisma runtime client    |
-| `DIRECT_URL`   | **yes**  | Neon **direct** URL used only by Prisma migrations       |
+| Variable       | Required | Notes                                                 |
+| -------------- | -------- | ----------------------------------------------------- |
+| `DATABASE_URL` | **yes**  | Neon **pooled** URL used by the Prisma runtime client |
+| `DIRECT_URL`   | **yes**  | Neon **direct** URL used only by Prisma migrations    |
 
 Missing mandatory variables cause a clear startup failure — the API does not
 fall back to placeholder secrets or database credentials.
@@ -126,10 +126,10 @@ pnpm --filter @nova/api start:dev    # watch mode
 
 Once the API is running (default `http://localhost:4000`):
 
-| Endpoint                        | Purpose                        | Success response                                        |
-| ------------------------------- | ------------------------------ | ------------------------------------------------------- |
-| `GET /api/v1/health`            | Liveness (no database access)  | `{ "status": "ok", "service": "nova-systems-lab-api" }` |
-| `GET /api/v1/health/database`   | Database connectivity readiness| `{ "status": "ok", "database": "up" }` (else `503`)     |
+| Endpoint                      | Purpose                         | Success response                                        |
+| ----------------------------- | ------------------------------- | ------------------------------------------------------- |
+| `GET /api/v1/health`          | Liveness (no database access)   | `{ "status": "ok", "service": "nova-systems-lab-api" }` |
+| `GET /api/v1/health/database` | Database connectivity readiness | `{ "status": "ok", "database": "up" }` (else `503`)     |
 
 Health endpoints never expose connection strings, credentials, hostnames,
 environment dumps, or stack traces.
@@ -140,3 +140,12 @@ environment dumps, or stack traces.
 - `docs/PROJECT_CONTEXT.md` — what Nova Systems Lab is and public positioning
 - `docs/ARCHITECTURE.md` — monorepo layout and architectural boundaries
 - `docs/DEVELOPMENT_STANDARDS.md` — workflow, checks, and security rules
+- `docs/BRAND_IDENTITY.md` — brand personality, tone of voice, approved wording
+- `docs/PRODUCT_POSITIONING.md` — positioning and the product-status vocabulary
+- `docs/design/UI_UX_FOUNDATION.md` — UI and accessibility principles
+- `docs/design/DESIGN_TOKENS.md` — design tokens with measured contrast
+- `docs/design/WEB_INFORMATION_ARCHITECTURE.md` — public site structure
+
+Public copy and UI must follow `docs/BRAND_IDENTITY.md` and
+`docs/PRODUCT_POSITIONING.md`. Do not claim legal incorporation, funding, scale,
+or product maturity that does not exist.

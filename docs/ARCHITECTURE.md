@@ -54,7 +54,7 @@ The database package is the single, standard entry point for Prisma access.
 Consumers import from the package root:
 
 ```ts
-import { database } from '@nova/database';
+import { database } from "@nova/database";
 ```
 
 ## API foundation (`@nova/api`)
@@ -82,6 +82,40 @@ import { database } from '@nova/database';
 Health responses never expose `DATABASE_URL`, credentials, hostnames,
 environment contents, stack traces, or filesystem paths. Failures log only the
 error class name.
+
+## Web application (`@nova/web`)
+
+Next.js 16 (App Router, Turbopack) + React 19 + Tailwind CSS v4. TypeScript
+strict. Unit tests run on Vitest + Testing Library (`pnpm --filter @nova/web test`).
+
+Boundaries:
+
+- The web app is **one client of the platform**, not the platform. It must not
+  access Prisma or `@nova/database`, and must not become the home of business
+  logic — that belongs behind the API so native clients can reuse it.
+- All browser-facing API calls go through `NEXT_PUBLIC_API_URL`. Never hardcode
+  Render URLs or production endpoints in components.
+- Server components by default; `"use client"` only for genuine interactivity.
+
+Frontend structure:
+
+```text
+apps/web/src
+├── app/          # App Router routes, root layout, globals.css (design tokens)
+├── components/ui # Shared primitives (Container, Button, StatusBadge)
+└── lib/          # Small framework-agnostic helpers
+```
+
+Design system:
+
+- Design tokens are CSS variables in `app/globals.css`, exposed to Tailwind via
+  `@theme inline`. Theming is dark-first with full light support and a
+  `[data-theme]` override for a future toggle.
+- Components use **semantic tokens** (`bg-surface-2`, `text-fg-muted`) rather
+  than `dark:` variants, so both themes stay correct without duplicated classes.
+- `packages/ui` is intentionally not created yet: the primitives have exactly one
+  consumer. Extract a shared package when a second client genuinely needs them.
+- See `design/DESIGN_TOKENS.md` and `design/UI_UX_FOUNDATION.md`.
 
 ## Data model scope
 

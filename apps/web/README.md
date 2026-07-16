@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# @nova/web
 
-## Getting Started
+The public Nova Systems Lab website. It is **one client of the platform**, not
+the platform itself: it must not access the database directly, and business
+logic belongs behind the API so future native clients can reuse it.
 
-First, run the development server:
+- Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict)
+- Tailwind CSS v4, themed through CSS-variable design tokens
+- Vitest + Testing Library for component tests
+
+## Commands
+
+Run from the repository root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm --filter @nova/web dev        # http://localhost:3000
+pnpm --filter @nova/web lint
+pnpm --filter @nova/web typecheck
+pnpm --filter @nova/web test       # vitest run
+pnpm --filter @nova/web test:watch
+pnpm --filter @nova/web build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local`. Browser-facing API calls must use
+`NEXT_PUBLIC_API_URL` — never hardcode Render or production endpoints.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
+```
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src
+├── app/           # Routes, root layout, globals.css (design tokens)
+├── components/ui  # Primitives: Container, Button, StatusBadge
+└── lib/           # Small helpers
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design system
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Design tokens are CSS variables in `src/app/globals.css`, exposed to Tailwind
+via `@theme inline`. Theming is **dark-first** with full light support; a
+`[data-theme="light"|"dark"]` attribute overrides the OS preference so a theme
+toggle can be added later without touching components.
 
-## Deploy on Vercel
+**Use semantic tokens, not `dark:` variants:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```tsx
+// Correct — follows the active theme automatically
+<div className="bg-surface-2 text-fg-muted border-border-subtle" />
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+// Wrong — duplicates theming in every component
+<div className="bg-zinc-100 dark:bg-zinc-900" />
+```
+
+Before changing colours, read `docs/design/DESIGN_TOKENS.md` — every token pair
+is contrast-measured. Design rules (accessibility, prohibited practices) are in
+`docs/design/UI_UX_FOUNDATION.md`; page structure is in
+`docs/design/WEB_INFORMATION_ARCHITECTURE.md`.
+
+## Current state
+
+`/` is a **foundation placeholder**, not the real homepage. The full site
+structure is specified in `docs/design/WEB_INFORMATION_ARCHITECTURE.md` and is
+built in later missions. Do not add routes, links, or copy that are not backed
+by real content.

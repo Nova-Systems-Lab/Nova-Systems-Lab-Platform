@@ -1,26 +1,215 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Nova Systems Lab — design tokens.
+ * See docs/design/DESIGN_TOKENS.md for the authoritative token reference and
+ * the measured contrast ratios behind these values.
+ *
+ * Theming is dark-first: :root carries the dark palette, a light palette is
+ * applied when the user's OS prefers light, and [data-theme] wins over both so
+ * an explicit in-product theme choice can be added later without touching
+ * component code. Components must use the semantic tokens below (bg-surface,
+ * text-fg-muted, ...) rather than `dark:` variants, so both themes stay correct
+ * automatically.
+ */
+
+/* ---------------------------------------------------------------- *
+ * Dark theme (default)
+ * ---------------------------------------------------------------- */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surface hierarchy: canvas -> surface -> surface-2 -> surface-3 */
+  --nova-canvas: #06070a;
+  --nova-surface: #0d1017;
+  --nova-surface-2: #141922;
+  --nova-surface-3: #1c2230;
+
+  /* Borders: `border` is decorative; `border-strong` is for interactive edges */
+  --nova-border: #232b3a;
+  --nova-border-strong: #5a6779;
+
+  /* Text */
+  --nova-fg: #f2f5fa;
+  --nova-fg-muted: #a7b0c0;
+  --nova-fg-subtle: #8a93a5;
+
+  /* Accent text/links (tuned per theme for contrast) */
+  --nova-accent-text: #5b8dff;
+  --nova-focus: #5b8dff;
+
+  /* Status */
+  --nova-success: #3dd68c;
+  --nova-warning: #f5b544;
+  --nova-danger: #ff6b6b;
+  --nova-info: #4fd1e0;
+  --nova-experimental: #a78bfa;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ---------------------------------------------------------------- *
+ * Light theme (OS preference)
+ * ---------------------------------------------------------------- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --nova-canvas: #ffffff;
+    --nova-surface: #f7f9fc;
+    --nova-surface-2: #eff3f8;
+    --nova-surface-3: #e4eaf2;
+
+    --nova-border: #d9e0ea;
+    --nova-border-strong: #7d8a9e;
+
+    --nova-fg: #0a0d14;
+    --nova-fg-muted: #4a5568;
+    --nova-fg-subtle: #5b6779;
+
+    --nova-accent-text: #1b4fd8;
+    --nova-focus: #1b4fd8;
+
+    --nova-success: #0f7a44;
+    --nova-warning: #8a5a00;
+    --nova-danger: #c0341d;
+    --nova-info: #0e6e7d;
+    --nova-experimental: #6d46c8;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------------------------------------------------------------- *
+ * Light theme (explicit override — wins over OS preference)
+ * ---------------------------------------------------------------- */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --nova-canvas: #ffffff;
+  --nova-surface: #f7f9fc;
+  --nova-surface-2: #eff3f8;
+  --nova-surface-3: #e4eaf2;
+
+  --nova-border: #d9e0ea;
+  --nova-border-strong: #7d8a9e;
+
+  --nova-fg: #0a0d14;
+  --nova-fg-muted: #4a5568;
+  --nova-fg-subtle: #5b6779;
+
+  --nova-accent-text: #1b4fd8;
+  --nova-focus: #1b4fd8;
+
+  --nova-success: #0f7a44;
+  --nova-warning: #8a5a00;
+  --nova-danger: #c0341d;
+  --nova-info: #0e6e7d;
+  --nova-experimental: #6d46c8;
+}
+
+/* ---------------------------------------------------------------- *
+ * Theme-independent tokens
+ * ---------------------------------------------------------------- */
+:root {
+  /* Electric-blue accent ladder. Identical in both themes: white text is
+   * legible on every step (5.07:1 / 6.03:1 / 6.65:1), so interactive fills
+   * behave the same everywhere. Hover/active darken rather than lighten. */
+  --nova-accent: #2a63f0;
+  --nova-accent-hover: #2159d8;
+  --nova-accent-active: #1b4fd8;
+  --nova-accent-fg: #ffffff;
+
+  /* Motion */
+  --nova-duration-instant: 80ms;
+  --nova-duration-fast: 120ms;
+  --nova-duration-normal: 160ms;
+  --nova-duration-slow: 240ms;
+}
+
+/* ---------------------------------------------------------------- *
+ * Tailwind theme mapping (`inline` keeps var() references live so the
+ * utilities follow the active theme)
+ * ---------------------------------------------------------------- */
+@theme inline {
+  --color-canvas: var(--nova-canvas);
+  --color-surface: var(--nova-surface);
+  --color-surface-2: var(--nova-surface-2);
+  --color-surface-3: var(--nova-surface-3);
+
+  --color-border-subtle: var(--nova-border);
+  --color-border-strong: var(--nova-border-strong);
+
+  --color-fg: var(--nova-fg);
+  --color-fg-muted: var(--nova-fg-muted);
+  --color-fg-subtle: var(--nova-fg-subtle);
+
+  --color-accent: var(--nova-accent);
+  --color-accent-hover: var(--nova-accent-hover);
+  --color-accent-active: var(--nova-accent-active);
+  --color-accent-fg: var(--nova-accent-fg);
+  --color-accent-text: var(--nova-accent-text);
+  --color-focus: var(--nova-focus);
+
+  --color-success: var(--nova-success);
+  --color-warning: var(--nova-warning);
+  --color-danger: var(--nova-danger);
+  --color-info: var(--nova-info);
+  --color-experimental: var(--nova-experimental);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.25rem;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-entrance: cubic-bezier(0, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+
+  /* Content widths (drive the Container primitive) */
+  --container-prose: 68ch;
+  --container-content: 72rem;
+  --container-wide: 80rem;
+}
+
+/* ---------------------------------------------------------------- *
+ * Base layer
+ * ---------------------------------------------------------------- */
+@layer base {
+  body {
+    background-color: var(--nova-canvas);
+    color: var(--nova-fg);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* A single, always-visible focus style. Meets the 3:1 non-text contrast
+   * requirement against every surface token in both themes. */
+  :focus-visible {
+    outline: 2px solid var(--nova-focus);
+    outline-offset: 2px;
+  }
+
+  /* Never remove focus styling without an equivalent replacement. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background-color: var(--nova-accent);
+    color: var(--nova-accent-fg);
+  }
+
+  /* Respect users who ask for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
